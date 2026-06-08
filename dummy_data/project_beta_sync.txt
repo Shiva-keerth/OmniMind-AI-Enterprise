@@ -1,0 +1,21 @@
+---
+Meeting: Project Beta Marketing Sync
+Date: November 2, 2026
+Attendees: Emily Watson (VP Marketing), Michael Chang (Campaign Lead), Sarah Jenkins (Lead Engineer)
+---
+
+Emily: Welcome everyone. Project Beta's launch is in 3 weeks. Michael, what is the status of the ad campaign?
+
+Michael: The LinkedIn ad creatives are done, but we are still waiting on the engineering team to provide the exact API endpoints so we can build the live demo for the landing page.
+
+Sarah: Sorry about the delay, my team was caught up with the Neo4j cluster for Project Alpha. I will personally finalize the Project Beta API endpoints and send them to you by Friday.
+
+Michael: Perfect. Once I have the endpoints, I'll launch the ad campaign on Monday. 
+
+Emily: Great. Let's make a firm decision right now regarding the ad budget. Are we allocating $50k or $100k for the initial push?
+
+Michael: Based on the Q3 metrics, I strongly recommend we start with $50k and scale up if the conversion rate holds above 4%.
+
+Emily: Done. We will cap the initial ad budget at $50k. 
+
+Michael: Awesome. So Sarah, your task is to provide the API endpoints by Friday. I will launch the ad campaign on Monday.
