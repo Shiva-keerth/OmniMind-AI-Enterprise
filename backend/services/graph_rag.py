@@ -2,16 +2,19 @@ import os
 from langchain_groq import ChatGroq
 from langchain_community.graphs import Neo4jGraph
 from langchain.chains import GraphCypherQAChain
-from dotenv import load_dotenv
 
-load_dotenv()
+class GraphRAGChatbot:
+    def __init__(self):
+        # Initialize Groq LLM
+        self.llm = ChatGroq(
+            model="llama-3.3-70b-versatile",
+            temperature=0,
+            api_key=os.environ["GROQ_API_KEY"]
+        )
 
-from langchain.prompts import PromptTemplate
-
-CYPHER_GENERATION_TEMPLATE = """Task:Generate Cypher statement to query a graph database.
+        CYPHER_GENERATION_TEMPLATE = """Task:Generate Cypher statement to query a graph database.
 Instructions:
 Use only the provided relationship types and properties in the schema.
-Do not use any other relationship types or properties that are not provided.
 IMPORTANT GRAPH SCHEMA RULES:
 - Project nodes have a 'name' property (NOT title).
 - Employee nodes have a 'name' property.
@@ -20,10 +23,11 @@ IMPORTANT GRAPH SCHEMA RULES:
 CRITICAL CYPHER SYNTAX RULES:
 - ALWAYS use valid Cypher arrow syntax: `(a)-[:REL]->(b)` or `(a)<-[:REL]-(b)`. NEVER use invalid syntax like `(a)-[:REL]<-(b)`.
 - Use `toLower()` and `CONTAINS` for fuzzy text matching.
+- NEVER introduce new variables inside a WHERE NOT pattern (e.g. use `WHERE NOT (a)<-[:ASSIGNED_TO]-()` instead of `(e:Employee)`).
 
 EXAMPLES (USE THESE EXACT PATTERNS):
 Question: "What action items is Michael assigned to?"
-Cypher: MATCH (e:Employee)-[:ASSIGNED_TO]->(a:ActionItem) WHERE toLower(e.name) CONTAINS toLower("michael") RETURN a.task
+Cypher: MATCH (e:Employee)-[:ASSIGNED_TO]->(a:ActionItem) WHERE toLower(e.name) CONTAINS toLower("michael") RETURN e.name, a.task
 
 Question: "What are all the action items required for Project Delta?"
 Cypher: MATCH (a:ActionItem)-[:BELONGS_TO]->(p:Project) WHERE toLower(p.name) CONTAINS toLower("delta") RETURN a.task, a.deadline
@@ -32,7 +36,10 @@ Question: "Who are all the employees currently working on Project Delta?"
 Cypher: MATCH (e:Employee)-[:MENTIONED_IN]->(p:Project) WHERE toLower(p.name) CONTAINS toLower("delta") RETURN e.name
 
 Question: "What is Brian working on before Friday?"
-Cypher: MATCH (e:Employee)-[:ASSIGNED_TO]->(a:ActionItem) WHERE toLower(e.name) CONTAINS toLower("brian") AND toLower(a.deadline) CONTAINS toLower("friday") RETURN a.task
+Cypher: MATCH (e:Employee)-[:ASSIGNED_TO]->(a:ActionItem) WHERE toLower(e.name) CONTAINS toLower("brian") RETURN e.name, a.task, a.deadline
+
+Question: "Are there any unassigned tasks in the system?"
+Cypher: MATCH (a:ActionItem) WHERE NOT (a)<-[:ASSIGNED_TO]-() RETURN a.task, a.deadline
 
 Schema:
 {schema}
@@ -43,11 +50,19 @@ IMPORTANT: Do not wrap the cypher in ```cypher code blocks. Return ONLY the raw 
 The question is:
 {question}"""
 
-CYPHER_GENERATION_PROMPT = PromptTemplate(
-    input_variables=["schema", "question"], template=CYPHER_GENERATION_TEMPLATE
-)
+        from langchain_core.prompts.prompt import PromptTemplate
+        self.cypher_prompt = PromptTemplate(
+            template=CYPHER_GENERATION_TEMPLATE,
+            input_variables=["schema", "question"]
+        )
 
-QA_TEMPLATE = """You are an AI assistant tasked with translating database JSON into a human sentence.
+        self.graph = Neo4jGraph(
+            url=os.environ["NEO4J_URI"],
+            username=os.environ["NEO4J_USERNAME"],
+            password=os.environ["NEO4J_PASSWORD"]
+        )
+        
+        QA_PROMPT_TEMPLATE = """You are an AI assistant tasked with translating database JSON into a human sentence.
 
 Database Results:
 {context}
@@ -57,57 +72,29 @@ Question:
 
 Instructions:
 1. If the Database Results contain ANY data (like a dictionary or list), you MUST use that data to answer the Question.
-2. Assume the Database Results are 100% correct and belong to the person/entity asked about, even if their name is missing from the JSON.
+2. Assume the Database Results are 100% correct and belong to the person/entity asked about.
 3. Simply rephrase the JSON data into a friendly sentence.
 4. ONLY if the Database Results are exactly empty `[]` or None, reply with "I couldn't find that in the database."
 """
-
-QA_PROMPT = PromptTemplate(
-    input_variables=["context", "question"], template=QA_TEMPLATE
-)
-
-class GraphRAGChatbot:
-    def __init__(self):
-        # 1. Connect to Neo4j Graph
-        uri = os.getenv("NEO4J_URI")
-        user = os.getenv("NEO4J_USERNAME")
-        password = os.getenv("NEO4J_PASSWORD")
-        
-        # We use LangChain's built-in Neo4j wrapper
-        self.graph = Neo4jGraph(url=uri, username=user, password=password, database=user)
-        
-        # 2. Initialize the LLM (Llama-3) for converting English to Cypher and Cypher to English
-        self.llm = ChatGroq(
-            temperature=0,
-            groq_api_key=os.getenv("GROQ_API_KEY"),
-            model_name="llama-3.3-70b-versatile"
+        self.qa_prompt = PromptTemplate(
+            template=QA_PROMPT_TEMPLATE,
+            input_variables=["context", "question"]
         )
-        
-        # 3. Create the LangChain Graph QA Chain
+
         self.chain = GraphCypherQAChain.from_llm(
+            graph=self.graph,
             cypher_llm=self.llm,
             qa_llm=self.llm,
-            graph=self.graph,
+            cypher_prompt=self.cypher_prompt,
+            qa_prompt=self.qa_prompt,
             verbose=True,
-            cypher_prompt=CYPHER_GENERATION_PROMPT,
-            qa_prompt=QA_PROMPT,
-            allow_dangerous_requests=True # Required to let LLM run cypher queries
+            return_direct=False
         )
 
     def ask_question(self, question: str) -> str:
-        """Takes a natural language question and answers it using Graph-RAG."""
         try:
-            # The chain will:
-            # 1. Understand the Graph Schema
-            # 2. Write a Cypher query based on the question
-            # 3. Execute the query
-            # 4. Formulate a human-readable answer
-            
-            # Refresh the schema so it catches newly ingested nodes!
             self.graph.refresh_schema()
-            
-            # We explicitly tell it the schema so it knows the node labels
             response = self.chain.invoke({"query": question})
-            return response.get("result", "I couldn't find an answer in the graph.")
+            return response.get("result", "I couldn't find an answer.")
         except Exception as e:
-            return f"Error executing Graph-RAG: {e}"
+            return f"Error executing Graph-RAG: {str(e)}"
