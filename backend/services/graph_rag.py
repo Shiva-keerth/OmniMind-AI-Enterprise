@@ -59,7 +59,8 @@ The question is:
         self.graph = Neo4jGraph(
             url=os.environ["NEO4J_URI"],
             username=os.environ["NEO4J_USERNAME"],
-            password=os.environ["NEO4J_PASSWORD"]
+            password=os.environ["NEO4J_PASSWORD"],
+            database=os.environ.get("NEO4J_DATABASE", os.environ["NEO4J_USERNAME"])
         )
         
         QA_PROMPT_TEMPLATE = """You are an AI assistant tasked with translating database JSON into a human sentence.
