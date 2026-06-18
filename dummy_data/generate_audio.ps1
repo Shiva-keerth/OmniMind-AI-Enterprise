@@ -1,5 +1,5 @@
 Add-Type -AssemblyName System.Speech
 $synth = New-Object System.Speech.Synthesis.SpeechSynthesizer
-$synth.SetOutputToWaveFile("c:\Users\ganti\chart\AI automation\OmniMind AI\dummy_data\project_gamma_audio.wav")
-$synth.Speak("Alright team, let us discuss Project Gamma. Our goal is to build a new frontend dashboard. David, your task is to design the UI components by next Wednesday. Sarah, please hook up the API endpoints by Friday. Emily will oversee the deployment. Let us make it happen.")
+$synth.SetOutputToWaveFile("c:\Users\ganti\chart\AI automation\OmniMind AI\dummy_data\project_delta_security.wav")
+$synth.Speak("Hello team. Let's kick off the Project Delta sync. We need to completely overhaul the security architecture. Michael, your task is to implement the OAuth2 flow by Monday. Jessica, please audit the current database roles and permissions by Wednesday. Brian, you need to write the security documentation before Friday. Thank you.")
 $synth.Dispose()

@@ -85,6 +85,9 @@ class GraphRAGChatbot:
             # 3. Execute the query
             # 4. Formulate a human-readable answer
             
+            # Refresh the schema so it catches newly ingested nodes!
+            self.graph.refresh_schema()
+            
             # We explicitly tell it the schema so it knows the node labels
             response = self.chain.invoke({"query": question})
             return response.get("result", "I couldn't find an answer in the graph.")
