@@ -13,8 +13,14 @@ pinned: false
 
 ## 📸 Application Interface
 
-*(Save your UI screenshot as `dashboard.png` in an `assets` folder!)*
+### Global Command Center — Live Neo4j Metrics
 ![OmniMind AI Dashboard](assets/dashboard.png)
+
+### Graph-RAG Corporate Knowledge Chatbot
+![Graph-RAG Chat](assets/graph_rag_chat.png)
+
+### Interactive Knowledge Graph Visualizer
+![Graph Visualizer](assets/graph_visualizer.png)
 
 ![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.103.0-009688.svg)
