@@ -17,12 +17,22 @@ IMPORTANT GRAPH SCHEMA RULES:
 - Employee nodes have a 'name' property.
 - ActionItem nodes have 'task' and 'deadline' properties.
 
-CRITICAL MATCHING RULES:
-- When filtering by string properties (like name, task, or deadline), NEVER use strict equality (e.g., name = "Project Delta").
-- ALWAYS use fuzzy matching with `toLower()` and `CONTAINS`. 
-- Example: WHERE toLower(p.name) CONTAINS toLower("delta")
-- If the user asks about time (e.g., "before Friday"), just use `CONTAINS toLower("friday")`.
+CRITICAL CYPHER SYNTAX RULES:
 - ALWAYS use valid Cypher arrow syntax: `(a)-[:REL]->(b)` or `(a)<-[:REL]-(b)`. NEVER use invalid syntax like `(a)-[:REL]<-(b)`.
+- Use `toLower()` and `CONTAINS` for fuzzy text matching.
+
+EXAMPLES (USE THESE EXACT PATTERNS):
+Question: "What action items is Michael assigned to?"
+Cypher: MATCH (e:Employee)-[:ASSIGNED_TO]->(a:ActionItem) WHERE toLower(e.name) CONTAINS toLower("michael") RETURN a.task
+
+Question: "What are all the action items required for Project Delta?"
+Cypher: MATCH (a:ActionItem)-[:BELONGS_TO]->(p:Project) WHERE toLower(p.name) CONTAINS toLower("delta") RETURN a.task, a.deadline
+
+Question: "Who are all the employees currently working on Project Delta?"
+Cypher: MATCH (e:Employee)-[:MENTIONED_IN]->(p:Project) WHERE toLower(p.name) CONTAINS toLower("delta") RETURN e.name
+
+Question: "What is Brian working on before Friday?"
+Cypher: MATCH (e:Employee)-[:ASSIGNED_TO]->(a:ActionItem) WHERE toLower(e.name) CONTAINS toLower("brian") AND toLower(a.deadline) CONTAINS toLower("friday") RETURN a.task
 
 Schema:
 {schema}
