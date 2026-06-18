@@ -22,6 +22,7 @@ CRITICAL MATCHING RULES:
 - ALWAYS use fuzzy matching with `toLower()` and `CONTAINS`. 
 - Example: WHERE toLower(p.name) CONTAINS toLower("delta")
 - If the user asks about time (e.g., "before Friday"), just use `CONTAINS toLower("friday")`.
+- ALWAYS use valid Cypher arrow syntax: `(a)-[:REL]->(b)` or `(a)<-[:REL]-(b)`. NEVER use invalid syntax like `(a)-[:REL]<-(b)`.
 
 Schema:
 {schema}
