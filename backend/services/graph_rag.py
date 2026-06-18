@@ -16,6 +16,13 @@ IMPORTANT GRAPH SCHEMA RULES:
 - Project nodes have a 'name' property (NOT title).
 - Employee nodes have a 'name' property.
 - ActionItem nodes have 'task' and 'deadline' properties.
+
+CRITICAL MATCHING RULES:
+- When filtering by string properties (like name, task, or deadline), NEVER use strict equality (e.g., name = "Project Delta").
+- ALWAYS use fuzzy matching with `toLower()` and `CONTAINS`. 
+- Example: WHERE toLower(p.name) CONTAINS toLower("delta")
+- If the user asks about time (e.g., "before Friday"), just use `CONTAINS toLower("friday")`.
+
 Schema:
 {schema}
 Note: Do not include any explanations or apologies in your responses.
