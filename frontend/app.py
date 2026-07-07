@@ -360,7 +360,7 @@ elif selected_tab == "Graph Visualizer":
             color = "#00f2fe" # Default Cyan
             if n["label"] == "Project": color = "#8a2be2" # Purple
             elif n["label"] == "Employee": color = "#4facfe" # Blue
-            elif n["label"] == "ActionItem": color = "#f6ad55" # Orange
+            elif n["label"] == "ActionItem": color = "#dd6b20" # Deep Orange
             
             nodes.append( Node(id=n["id"], label=n["title"], size=25, color=color, shape="box") )
             
