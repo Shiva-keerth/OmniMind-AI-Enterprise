@@ -345,7 +345,7 @@ elif selected_tab == "Graph Visualizer":
                     <span style="color: #cbd5e0; font-size: 14px; font-weight: 500;">Employee</span>
                 </div>
                 <div style="display: flex; align-items: center; gap: 8px;">
-                    <div style="width: 14px; height: 14px; background: #f6ad55; border-radius: 3px;"></div>
+                    <div style="width: 14px; height: 14px; background: #10b981; border-radius: 3px;"></div>
                     <span style="color: #cbd5e0; font-size: 14px; font-weight: 500;">Action Item</span>
                 </div>
             </div>
@@ -360,7 +360,7 @@ elif selected_tab == "Graph Visualizer":
             color = "#00f2fe" # Default Cyan
             if n["label"] == "Project": color = "#8a2be2" # Purple
             elif n["label"] == "Employee": color = "#4facfe" # Blue
-            elif n["label"] == "ActionItem": color = "#dd6b20" # Deep Orange
+            elif n["label"] == "ActionItem": color = "#10b981" # Emerald Green
             
             nodes.append( Node(id=n["id"], label=n["title"], size=25, color=color, shape="box") )
             
