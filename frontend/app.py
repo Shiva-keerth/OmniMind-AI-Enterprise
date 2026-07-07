@@ -366,7 +366,7 @@ elif selected_tab == "Graph Visualizer":
             
         # Build Edges
         for e in edges_data:
-            edges.append( Edge(source=e["source"], target=e["target"], type="CURVE_SMOOTH", color="#4a5568") )
+            edges.append( Edge(source=e["source"], target=e["target"], type="CURVE_SMOOTH", color="#cbd5e1") )
             
         config = Config(
             width="100%",
