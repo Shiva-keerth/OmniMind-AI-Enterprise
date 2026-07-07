@@ -41,6 +41,9 @@ Cypher: MATCH (e:Employee)-[:ASSIGNED_TO]->(a:ActionItem) WHERE toLower(e.name) 
 Question: "Are there any unassigned tasks in the system?"
 Cypher: MATCH (a:ActionItem) WHERE NOT (a)<-[:ASSIGNED_TO]-() RETURN a.task, a.deadline
 
+Question: "Which employees were mentioned in Project Alpha, and what action items belong to it?"
+Cypher: MATCH (e:Employee)-[:MENTIONED_IN]->(p:Project)<-[:BELONGS_TO]-(a:ActionItem) WHERE toLower(p.name) CONTAINS toLower("alpha") RETURN e.name, a.task
+
 Schema:
 {schema}
 Note: Do not include any explanations or apologies in your responses.
@@ -88,6 +91,7 @@ Instructions:
             qa_llm=self.llm,
             cypher_prompt=self.cypher_prompt,
             qa_prompt=self.qa_prompt,
+            validate_cypher=True,
             verbose=True,
             return_direct=False
         )
