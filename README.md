@@ -1,12 +1,3 @@
----
-title: OmniMind AI
-emoji: 🧠
-colorFrom: blue
-colorTo: purple
-sdk: streamlit
-app_file: frontend/app.py
-pinned: false
----
 # 🧠 OmniMind AI - Enterprise Knowledge Engine
 
 **Live Enterprise Demo:** [OmniMind AI on Hugging Face](https://huggingface.co/spaces/farracer/OmniMind-AI-Enterprise)
