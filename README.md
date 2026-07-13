@@ -1,6 +1,28 @@
 # 🧠 OmniMind AI - Enterprise Knowledge Engine
 
-**Live Enterprise Demo:** [OmniMind AI on Hugging Face](https://huggingface.co/spaces/farracer/OmniMind-AI-Enterprise)
+![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.103-009688?style=for-the-badge&logo=fastapi&logoColor=white)
+![Neo4j](https://img.shields.io/badge/Neo4j-Graph_DB-018bff?style=for-the-badge&logo=neo4j&logoColor=white)
+![LangChain](https://img.shields.io/badge/LangChain-Orchestration-1C3C3C?style=for-the-badge&logo=langchain&logoColor=white)
+![GraphRAG](https://img.shields.io/badge/Graph--RAG-Architecture-8A2BE2?style=for-the-badge)
+![Streamlit](https://img.shields.io/badge/Streamlit-UI-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)
+![Groq](https://img.shields.io/badge/Groq-LPU_Inference-F55036?style=for-the-badge&logo=groq&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
+
+> **🔗 Live Demo:** [OmniMind AI on Hugging Face](https://huggingface.co/spaces/farracer/OmniMind-AI-Enterprise) &nbsp;|&nbsp; **📂 Repository:** [GitHub](https://github.com/Shiva-keerth/OmniMind-AI-Enterprise)
+
+---
+
+## ✨ Highlights
+
+- 🏢 **Enterprise Knowledge Graph** — Converts raw corporate data into structured, queryable graph intelligence
+- 🧬 **Graph-RAG** — Natural language → Cypher queries via `GraphCypherQAChain`, not traditional vector-only RAG
+- 🎙️ **Multi-Modal Ingestion** — Accepts raw text, PDFs, and audio (Zoom recordings) via Groq Whisper
+- 📊 **Live Neo4j Visualization** — Real-time entity counts, relationship maps, and graph health metrics
+- 🤖 **Agentic Extraction** — Llama-3.3-70B extracts `Projects`, `Employees`, `Action Items`, `Deadlines` automatically
+- 🚀 **Production Deployment** — Live on Hugging Face Spaces with Supabase + Neo4j Aura backends
+
+---
 
 ## 📸 Application Interface
 
@@ -13,12 +35,7 @@
 ### Interactive Knowledge Graph Visualizer
 ![Graph Visualizer](assets/graph_visualizer.png)
 
-![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)
-![FastAPI](https://img.shields.io/badge/FastAPI-0.103.0-009688.svg)
-![Streamlit](https://img.shields.io/badge/Streamlit-1.32.0-FF4B4B.svg)
-![Neo4j](https://img.shields.io/badge/Neo4j-Graph_Database-018bff.svg)
-![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-3ECF8E.svg)
-![LangChain](https://img.shields.io/badge/LangChain-AI_Orchestration-1c3c3c.svg)
+---
 
 OmniMind AI is a highly advanced, multi-modal **Enterprise Knowledge Engine** and **Graph-RAG System**. It solves the multi-billion dollar corporate problem of "Information Silos" by ingesting messy internal data (Zoom meeting audio, strategy PDFs, text documents), extracting structured actionable intelligence, and indexing it into a Knowledge Graph for natural language querying.
 
@@ -82,10 +99,22 @@ graph TD
 * **AI/ML:** LangChain, Groq API (Llama-3.3-70b-versatile, Whisper-large-v3)
 * **Databases:** Neo4j (Aura Cloud), Supabase (PostgreSQL)
 
+## ☁️ Deployment
+
+| Layer | Platform | Details |
+|-------|----------|---------|
+| **Frontend** | Hugging Face Spaces | Streamlit app with custom CSS, auto-deployed |
+| **Backend** | Render | FastAPI server with Uvicorn, auto-restart on push |
+| **Graph Database** | Neo4j Aura (Cloud) | Managed graph instance with Bolt protocol |
+| **Relational Database** | Supabase (PostgreSQL) | Managed Postgres for transcript storage & audit logs |
+| **LLM Inference** | Groq Cloud | Llama-3.3-70B + Whisper-large-v3 via ultra-low-latency LPU |
+
 ## 💻 Local Development Setup
 
 1. **Clone the repository and create a virtual environment:**
    ```bash
+   git clone https://github.com/Shiva-keerth/OmniMind-AI-Enterprise.git
+   cd OmniMind-AI-Enterprise
    python -m venv .venv
    .\.venv\Scripts\activate
    ```
